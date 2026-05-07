@@ -280,6 +280,39 @@
         .login-prompt a:hover {
             text-decoration: underline;
         }
+                .chirp-actions {
+            margin-left: 50px;
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .like-btn, .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.2s;
+        }
+
+        .like-btn:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .like-btn.liked {
+            color: #e0245e;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .like-count {
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -356,7 +389,29 @@
                     </div>
                 @endif
             </div>
-            <div class="chirp-message">{{ $chirp->message }}</div>
+                        <div class="chirp-message">{{ $chirp->message }}</div>
+            
+            <div class="chirp-actions">
+                @auth
+                    <form action="{{ route('chirps.like', $chirp) }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="like-btn {{ $chirp->isLikedBy(auth()->user()) ? 'liked' : '' }}">
+                            {{ $chirp->isLikedBy(auth()->user()) ? '❤️' : '🤍' }} {{ $chirp->likes->count() }}
+                        </button>
+                    </form>
+                    
+                    @if($chirp->user_id === auth()->id())
+                        <form action="{{ route('chirps.destroy', $chirp) }}" method="POST" style="display: inline; margin-left: 10px;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete-btn" onclick="return confirm('Delete this chirp?')">🗑️</button>
+                        </form>
+                    @endif
+                @else
+                    <span class="like-count">❤️ {{ $chirp->likes->count() }}</span>
+                @endauth
+            </div>
+        </div>
         </div>
     @empty
         <p style="text-align: center; color: var(--secondary-text); padding: 20px;">No chirps yet. Be the first!</p>

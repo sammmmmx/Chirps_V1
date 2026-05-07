@@ -10,6 +10,10 @@ require __DIR__.'/auth.php';
 // Your chirps routes
 Route::get('/', [ChirpController::class, 'index'])->name('chirps.index');
 Route::post('/chirps', [ChirpController::class, 'store'])->name('chirps.store');
+Route::get('/', [ChirpController::class, 'index'])->name('chirps.index');
+Route::post('/chirps', [ChirpController::class, 'store'])->name('chirps.store');
+Route::delete('/chirps/{chirp}', [ChirpController::class, 'destroy'])->name('chirps.destroy');
+Route::post('/chirps/{chirp}/like', [ChirpController::class, 'like'])->name('chirps.like');
 
 // Breeze dashboard
 Route::get('/dashboard', function () {
