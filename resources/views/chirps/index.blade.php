@@ -313,6 +313,20 @@
             color: var(--secondary-text);
             font-size: 14px;
         }
+                .edit-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .edit-btn:hover {
+            background: rgba(29, 161, 242, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -400,7 +414,8 @@
                         </button>
                     </form>
                     
-                    @if($chirp->user_id === auth()->id())
+                                       @if($chirp->user_id === auth()->id())
+                        <a href="{{ route('chirps.edit', $chirp) }}" class="edit-btn" style="margin-left: 10px;">✏️</a>
                         <form action="{{ route('chirps.destroy', $chirp) }}" method="POST" style="display: inline; margin-left: 10px;">
                             @csrf
                             @method('DELETE')
