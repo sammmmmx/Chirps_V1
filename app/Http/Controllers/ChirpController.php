@@ -37,6 +37,31 @@ class ChirpController extends Controller
 
         return redirect()->route('chirps.index')->with('success', 'Chirp deleted!');
     }
+        public function edit(Chirp $chirp)
+    {
+        if ($chirp->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('chirps.edit', compact('chirp'));
+    }
+
+    public function update(Request $request, Chirp $chirp)
+    {
+        if ($chirp->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $request->validate([
+            'message' => 'required|max:280'
+        ]);
+
+        $chirp->update([
+            'message' => $request->message
+        ]);
+
+        return redirect()->route('chirps.index')->with('success', 'Chirp updated!');
+    }
 
     public function like(Chirp $chirp)
     {
